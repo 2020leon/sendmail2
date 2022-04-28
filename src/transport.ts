@@ -4,6 +4,7 @@ import tls from 'tls';
 
 import nodemailer from 'nodemailer';
 
+import metadata from './metadata';
 import SendmailError from './error/sendmail_error';
 import UnsafeError from './error/unsafe_error';
 import SMTPClient from './smtp_client';
@@ -120,9 +121,9 @@ const getHost = (address: string) => {
  * });
  */
 export default class Transport implements nodemailer.Transport<void> {
-  public readonly name = 'sendmail2';
+  public readonly name = metadata.name;
 
-  public readonly version = '0.0.0';
+  public readonly version = metadata.version;
 
   public send(
     mail: import('nodemailer/lib/mailer/mail-message')<void>,
