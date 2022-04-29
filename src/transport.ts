@@ -86,8 +86,16 @@ const sendToSMTP = async (
         ...{ preGreet: true },
       });
       newClient.setEncoding('utf-8');
-      await waitSending(tlsSocket, newClient);
+      try {
+        await waitSending(tlsSocket, newClient);
+      } catch (error) {
+        tlsSocket.end();
+        newClient.end();
+        throw error;
+      }
     } else {
+      socket.end();
+      client.end();
       throw err;
     }
   }
