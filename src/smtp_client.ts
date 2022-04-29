@@ -89,7 +89,7 @@ export default class SMTPClient extends stream.Transform {
             return new SendmailError('invalid smtp server message');
         } else {
           const response = this.response(code, `${msg}\r\n`);
-          if (response instanceof UnsafeError || response === null)
+          if (response instanceof SendmailError || response === null)
             return response;
           this.pushResponse(response);
           msg = '';
@@ -108,7 +108,7 @@ export default class SMTPClient extends stream.Transform {
     );
   }
 
-  private response(code: string, msg: string): CmdMsg | null | UnsafeError {
+  private response(code: string, msg: string): CmdMsg | null | SendmailError {
     switch (Number(code)) {
       case 220: // Service ready
         if (!this.isTLS && this.canBeTLS)
@@ -130,7 +130,7 @@ export default class SMTPClient extends stream.Transform {
       case 354: // Start mail input
         return { cmd: '', msg: `${this.body}.` };
       default:
-        return { cmd: 'QUIT' };
+        return new SendmailError(`get code ${msg} and response ${msg}`);
     }
   }
 
