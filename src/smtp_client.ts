@@ -57,7 +57,7 @@ export default class SMTPClient extends stream.Transform {
       this.pushResponse({ cmd: 'EHLO', msg: options.senderHost });
   }
 
-  public _transform(
+  public override _transform(
     chunk: Buffer | string | undefined,
     encoding: BufferEncoding,
     callback: stream.TransformCallback,
@@ -100,7 +100,7 @@ export default class SMTPClient extends stream.Transform {
     );
   }
 
-  public _flush(callback: stream.TransformCallback): void {
+  public override _flush(callback: stream.TransformCallback): void {
     return callback(
       this.strBuf === ''
         ? null
