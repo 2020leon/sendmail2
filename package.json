@@ -19,7 +19,7 @@
     "lint:fix": "eslint --ext .ts src/ --fix",
     "prepare": "husky install"
   },
-  "peerDependencies": {
+  "dependencies": {
     "nodemailer": "^6.6.1"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 import Transport from './transport';
+import Sender from './sender';
 import SMTPClient from './smtp_client';
 
-export { Transport, SMTPClient };
+export { Transport, Sender, SMTPClient };
 
-export default { Transport, SMTPClient };
+export default { Transport, Sender, SMTPClient };
