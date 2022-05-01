@@ -2,8 +2,8 @@
 
 Sendmail2 - Send Mail to Somewhere You Want
 
-Sendmail2 is a package with [nodemailer][nodemailer-npm](^6.6.1) as a peer
-dependency. It tries to send emails without `sendmail` command.
+Sendmail2 is a package that you can create a transport of
+[nodemailer][nodemailer-npm](^6.6.1) or send emails directly.
 
 ## Installation
 
@@ -15,6 +15,8 @@ npm i sendmail2
 
 ## Usage
 
+- Create a transport of nodemailer
+
 ```typescript
 import sendmail2 from 'sendmail2';
 import nodemailer from 'nodemailer';
@@ -22,6 +24,20 @@ import nodemailer from 'nodemailer';
 const transport = new sendmail2.Transport();
 const transporter = nodemailer.createTransport(transport);
 transporter.sendMail({
+  from: 'foo@example.com',
+  to: 'bar@example.com',
+  subject: 'Sendmail2',
+  text: 'Send mail 2 u!',
+});
+```
+
+- Send an email directly
+
+```typescript
+import sendmail2 from 'sendmail2';
+
+const sender = new sendmail2.Sender();
+sender.send({
   from: 'foo@example.com',
   to: 'bar@example.com',
   subject: 'Sendmail2',
