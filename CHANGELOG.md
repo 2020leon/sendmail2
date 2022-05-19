@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1 (2022-05-19)
+
+### Bug Fixes
+
+- specify node engine version
+- rename license file
+
 ## 0.1.0 (2022-05-01)
 
 ### Features

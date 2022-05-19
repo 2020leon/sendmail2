@@ -7,10 +7,15 @@ Sendmail2 is a package that you can create a transport of
 
 ## Installation
 
-You can install Sendmail2 using `npm`.
+You can install Sendmail2 using `npm`, `yarn`, or `pnpm`.
 
 ```sh
+# npm
 npm i sendmail2
+# yarn
+yarn add sendmail2
+# pnpm
+pnpm i sendmail2
 ```
 
 ## Usage
@@ -56,6 +61,12 @@ Contributing is welcome!
 ## License
 
 MIT
+
+## Links
+
+[GitHub](https://github.com/2020leon/sendmail2),
+[npm](https://www.npmjs.com/package/sendmail2),
+[yarn](https://yarnpkg.com/package/sendmail2)
 
 [nodemailer-npm]: https://www.npmjs.com/package/nodemailer
 [sendmail-npm]: https://www.npmjs.com/package/sendmail
