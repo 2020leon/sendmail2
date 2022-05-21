@@ -6,7 +6,7 @@ import SendmailError from './error/sendmail_error';
 import UnsafeError from './error/unsafe_error';
 import SMTPClient from './smtp_client';
 
-const createMxConnection = async (domain: string) => {
+const getMxRecordExchanges = async (domain: string) => {
   const addresses = await new Promise<dns.MxRecord[]>((resolve, reject) =>
     dns.resolveMx(domain, (err, _addresses) =>
       err ? reject(err) : resolve(_addresses),
@@ -14,27 +14,9 @@ const createMxConnection = async (domain: string) => {
   );
   if (!addresses || addresses.length === 0)
     throw new SendmailError(`can not resolve Mx of <${domain}>`);
-  addresses.sort((a, b) => a.priority - b.priority);
-  // try to connect to the highest priority mx address
-  // if fail, try to connect to the next address
-  return addresses.reduce(
-    (prev, address) =>
-      prev.catch(
-        (err) =>
-          new Promise((resolve, reject) => {
-            const socket = net.createConnection(25, address.exchange);
-            socket
-              .on('error', () => reject(err))
-              .on('connect', () => {
-                socket.removeAllListeners('error');
-                resolve(socket);
-              });
-          }),
-      ),
-    Promise.reject<net.Socket>(
-      new SendmailError(`can not connect to any SMTP server of ${domain}`),
-    ),
-  );
+  return addresses
+    .sort((a, b) => a.priority - b.priority)
+    .map((address) => address.exchange);
 };
 
 const waitSending = async (
@@ -70,9 +52,20 @@ const getHost = (address: string) => {
   return arr[1];
 };
 
-const sendToSMTP = async (
+const createConnection = (host: string) => {
+  return new Promise<net.Socket>((resolve, reject) => {
+    const socket = net.createConnection(25, host);
+    socket.on('error', reject).on('connect', () => {
+      socket.removeAllListeners('error');
+      resolve(socket);
+    });
+  });
+};
+
+const sendToSocket = async (
   senderAddress: string,
   recipient: string,
+  socket: net.Socket,
   body: Buffer,
 ) => {
   const clientOpts = {
@@ -81,7 +74,6 @@ const sendToSMTP = async (
     recipient,
     body: body.toString('utf-8'),
   };
-  const socket = await createMxConnection(getHost(recipient));
   const client = new SMTPClient(clientOpts);
   socket.setEncoding('utf-8');
   client.setEncoding('utf-8');
@@ -109,6 +101,41 @@ const sendToSMTP = async (
       throw err;
     }
   }
+};
+
+/**
+ * Send email via SMTP
+ * @param senderAddress email address of the sender
+ * @param recipient email address of recipient
+ * @param body buffer to be sent
+ */
+const sendToSMTP = async (
+  senderAddress: string,
+  recipient: string,
+  body: Buffer,
+) => {
+  const domain = getHost(recipient);
+  const exchanges = await getMxRecordExchanges(domain);
+  // Try to connect to the highest priority mx address and send email. If fail,
+  // try to connect to the next address.
+  await exchanges.reduce(
+    (prev, exchange) =>
+      prev.catch(
+        (err) =>
+          new Promise((resolve, reject) =>
+            createConnection(exchange)
+              .then((socket) =>
+                sendToSocket(senderAddress, recipient, socket, body)
+                  .then(resolve)
+                  .catch(reject),
+              )
+              .catch(() => reject(err)),
+          ),
+      ),
+    Promise.reject<void>(
+      new SendmailError(`can not connect to any SMTP server of ${domain}`),
+    ),
+  );
 };
 
 export default sendToSMTP;
