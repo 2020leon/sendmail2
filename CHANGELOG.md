@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 (2022-05-21)
+
+### Bug Fixes
+
+- try lower priority host if sending fail
+
 ## 0.1.1 (2022-05-19)
 
 ### Bug Fixes
