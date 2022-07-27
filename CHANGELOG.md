@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.3 (2022-07-27)
+
+### Bug Fixes
+
+- pass second argument to callback if success
+  - avoid "TypeError: Cannot set properties of undefined"
+- use literal name and version in metadata
+  - make sure the package always gets the correct name and version no matter it
+    is packed or not
+
 ## 0.1.2 (2022-05-21)
 
 ### Bug Fixes
