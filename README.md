@@ -15,7 +15,7 @@ npm i sendmail2
 # yarn
 yarn add sendmail2
 # pnpm
-pnpm i sendmail2
+pnpm add sendmail2
 ```
 
 ## Usage
