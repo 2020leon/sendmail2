@@ -6,7 +6,7 @@
   },
   "extends": [
     "standard",
-    "airbnb/base",
+    "airbnb-base",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
