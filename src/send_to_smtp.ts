@@ -118,24 +118,19 @@ const sendToSMTP = async (
   const exchanges = await getMxRecordExchanges(domain);
   // Try to connect to the highest priority mx address and send email. If fail,
   // try to connect to the next address.
-  await exchanges.reduce(
-    (prev, exchange) =>
-      prev.catch(
-        (err) =>
-          new Promise((resolve, reject) =>
-            createConnection(exchange)
-              .then((socket) =>
-                sendToSocket(senderAddress, recipient, socket, body)
-                  .then(resolve)
-                  .catch(reject),
-              )
-              .catch(() => reject(err)),
-          ),
-      ),
-    Promise.reject<void>(
-      new SendmailError(`can not connect to any SMTP server of ${domain}`),
-    ),
-  );
+  await exchanges.reduce(async (prev, exchange) => {
+    try {
+      await prev;
+    } catch (err) {
+      let socket;
+      try {
+        socket = await createConnection(exchange);
+      } catch {
+        throw err;
+      }
+      await sendToSocket(senderAddress, recipient, socket, body);
+    }
+  }, Promise.reject<void>(new SendmailError(`can not connect to any SMTP server of ${domain}`)));
 };
 
 export default sendToSMTP;
