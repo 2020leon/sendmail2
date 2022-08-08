@@ -122,7 +122,7 @@ const sendToSMTP = async (
     try {
       await prev;
     } catch (err) {
-      let socket;
+      let socket: Awaited<ReturnType<typeof createConnection>>;
       try {
         socket = await createConnection(exchange);
       } catch {
