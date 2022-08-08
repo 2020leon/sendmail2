@@ -130,7 +130,7 @@ export default class SMTPClient extends stream.Transform {
       case 354: // Start mail input
         return { cmd: '', msg: `${this.body}.` };
       default:
-        return new SendmailError(`get code ${msg} and response ${msg}`);
+        return new SendmailError(`get code ${code} and response ${msg}`);
     }
   }
 
