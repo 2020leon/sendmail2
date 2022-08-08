@@ -28,12 +28,11 @@ const waitSending = async (
   try {
     await new Promise<void>((resolve, reject) => {
       client.on('error', reject).on('end', resolve);
-      socket.on('error', reject).on('end', client.end);
+      socket.on('error', reject);
     });
-  } catch (err) {
+  } finally {
     socket.unpipe(client);
     client.unpipe(socket);
-    throw err;
   }
 };
 
@@ -75,9 +74,8 @@ const sendToSocket = async (
     body: body.toString('utf-8'),
   };
   const client = new SMTPClient(clientOpts);
-  socket.setEncoding('utf-8');
-  client.setEncoding('utf-8');
   try {
+    client.setEncoding('utf-8');
     await waitSending(socket, client);
   } catch (err) {
     if (err instanceof UnsafeError) {
@@ -87,19 +85,16 @@ const sendToSocket = async (
         ...clientOpts,
         ...{ preGreet: true },
       });
-      newClient.setEncoding('utf-8');
       try {
+        newClient.setEncoding('utf-8');
         await waitSending(tlsSocket, newClient);
-      } catch (error) {
+      } finally {
         tlsSocket.end();
         newClient.end();
-        throw error;
       }
-    } else {
-      socket.end();
-      client.end();
-      throw err;
-    }
+    } else throw err;
+  } finally {
+    client.end();
   }
 };
 
@@ -128,7 +123,12 @@ const sendToSMTP = async (
       } catch {
         throw err;
       }
-      await sendToSocket(senderAddress, recipient, socket, body);
+      try {
+        socket.setEncoding('utf-8');
+        await sendToSocket(senderAddress, recipient, socket, body);
+      } finally {
+        socket.end();
+      }
     }
   }, Promise.reject<void>(new SendmailError(`can not connect to any SMTP server of ${domain}`)));
 };
