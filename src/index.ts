@@ -3,5 +3,3 @@ import Sender from './sender';
 import SMTPClient from './smtp_client';
 
 export { Transport, Sender, SMTPClient };
-
-export default { Transport, Sender, SMTPClient };
