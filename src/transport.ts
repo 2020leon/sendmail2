@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import MimeNode from 'nodemailer/lib/mime-node';
 
-import metadata from './metadata';
+import * as metadata from './metadata';
 import SendmailError from './error/sendmail_error';
 import sendToSMTP from './send_to_smtp';
 

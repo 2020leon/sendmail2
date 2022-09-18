@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-echo "export default { name: '$(node -p "require('./package.json').name")', version: '$(node -p "require('./package.json').version")' };" >| src/metadata.ts
+NAME=$(node -p "require('./package.json').name")
+VERSION=$(node -p "require('./package.json').version")
+printf "export const name = '%s';\nexport const version = '%s';\n" "$NAME" "$VERSION" >| src/metadata.ts
 git add src/metadata.ts

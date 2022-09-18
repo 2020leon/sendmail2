@@ -1,1 +1,2 @@
-export default { name: 'sendmail2', version: '0.1.3' };
+export const name = 'sendmail2';
+export const version = '0.1.3';
