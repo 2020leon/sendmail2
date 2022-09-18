@@ -23,7 +23,7 @@ pnpm add sendmail2
 - Create a transport of nodemailer
 
 ```typescript
-import sendmail2 from 'sendmail2';
+import * as sendmail2 from 'sendmail2';
 import nodemailer from 'nodemailer';
 
 const transport = new sendmail2.Transport();
@@ -39,7 +39,7 @@ transporter.sendMail({
 - Send an email directly
 
 ```typescript
-import sendmail2 from 'sendmail2';
+import * as sendmail2 from 'sendmail2';
 
 const sender = new sendmail2.Sender();
 sender.send({
