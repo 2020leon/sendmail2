@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 (2022-09-18)
+
+### Features
+
+- remove default export in index.ts
+
+### Bug Fixes
+
+- correct error message
+
 ## 0.1.3 (2022-07-27)
 
 ### Bug Fixes
