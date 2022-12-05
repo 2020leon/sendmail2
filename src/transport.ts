@@ -27,32 +27,28 @@ export default class Transport
 
   public readonly version = metadata.version;
 
-  public send(
+  public async send(
     mail: import('nodemailer/lib/mailer/mail-message'),
     callback: (
       err: Error | null,
       info?: { envelope: MimeNode.Envelope; messageId: string },
     ) => void,
   ) {
-    const envelope = mail.message.getEnvelope();
-    const messageId = mail.message.messageId();
-    const senderAddress = envelope.from;
-    if (!senderAddress)
-      return callback(new SendmailError('sender address is invalid'));
-
-    return mail.message.build((err, msg) => {
-      if (err) return callback(err);
-      return Promise.all(
-        envelope.to.map((address) => {
-          try {
-            return sendToSMTP(senderAddress, address, msg);
-          } catch (e) {
-            return Promise.reject(e);
-          }
-        }),
-      )
-        .then(() => callback(null, { envelope, messageId }))
-        .catch(callback);
-    });
+    try {
+      const envelope = mail.message.getEnvelope();
+      const messageId = mail.message.messageId();
+      const senderAddress = envelope.from;
+      if (!senderAddress) throw new SendmailError('sender address is invalid');
+      const body = await new Promise<Buffer>((resolve, reject) =>
+        mail.message.build((err, msg) => (err ? reject(err) : resolve(msg))),
+      );
+      await Promise.all(
+        envelope.to.map((address) => sendToSMTP(senderAddress, address, body)),
+      );
+      return callback(null, { envelope, messageId });
+    } catch (e) {
+      const err = e as Error;
+      return callback(err);
+    }
   }
 }
