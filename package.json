@@ -24,25 +24,25 @@
     "nodemailer": "^6.6.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@types/node": "^18.7.18",
-    "@types/nodemailer": "^6.4.6",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
-    "eslint": "^8.23.1",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@types/node": "^18.11.17",
+    "@types/nodemailer": "^6.4.7",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "eslint": "^8.30.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.0.1",
-    "husky": "^8.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.2",
     "markdownlint-cli": "^0.32.2",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.1",
     "shellcheck": "^1.1.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.9.4"
   },
   "engines": {
     "node": ">=8.0.0"
