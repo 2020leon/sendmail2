@@ -12,7 +12,7 @@ const getMxRecordExchanges = async (domain: string) => {
       err ? reject(err) : resolve(_addresses),
     ),
   );
-  if (!addresses || addresses.length === 0)
+  if (addresses.length === 0)
     throw new SendmailError(`can not resolve Mx of <${domain}>`);
   return addresses
     .sort((a, b) => a.priority - b.priority)

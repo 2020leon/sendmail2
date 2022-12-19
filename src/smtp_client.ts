@@ -29,6 +29,7 @@ export default class SMTPClient extends stream.Transform {
 
   constructor(
     options: stream.TransformOptions & {
+      objectMode?: false;
       senderHost: string;
       senderAddress: string;
       recipient: string;
@@ -37,7 +38,8 @@ export default class SMTPClient extends stream.Transform {
       preGreet?: boolean;
     },
   ) {
-    super(options);
+    // objectMode should be false to make sure `chunk` be Buffer or string
+    super({ ...options, objectMode: false });
     this.senderHost = options.senderHost;
     this.list250 = [
       {
@@ -58,12 +60,11 @@ export default class SMTPClient extends stream.Transform {
   }
 
   public override _transform(
-    chunk: Buffer | string | undefined,
+    chunk: Buffer | string,
     encoding: BufferEncoding,
     callback: stream.TransformCallback,
   ): void {
-    const _chunk =
-      typeof chunk === 'string' ? chunk : (chunk?.toString() as string);
+    const _chunk = typeof chunk === 'string' ? chunk : chunk.toString();
     const lineBuf = (this.strBuf + _chunk).split('\r\n');
     this.strBuf = lineBuf.pop() ?? '';
 
