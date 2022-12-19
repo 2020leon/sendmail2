@@ -1,6 +1,6 @@
 {
   "name": "sendmail2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Send Mail to Somewhere You Want",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
