@@ -128,7 +128,7 @@ export default class SMTPClient extends stream.Transform {
       case 251: // User not local; will forward to <forward-path>
         return this.list250.shift() ?? { cmd: 'QUIT' };
       case 354: // Start mail input
-        return { cmd: '', msg: `${this.body}.` };
+        return { cmd: `${this.body}.` };
       default:
         return new SendmailError(`get code ${code} and response ${msg}`);
     }
