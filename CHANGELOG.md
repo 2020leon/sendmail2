@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 (2022-12-19)
+
+### Bug Fixes
+
+- fix redundant leading space of body
+
 ## 0.2.0 (2022-09-18)
 
 ### Features
